@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spotify Clone - Strona Główna</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <header>
+        <h1>Witaj w Spotify Clone</h1>
+        <nav>
+            <ul>
+                <li><a href="/logout">Wyloguj się</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <main>
+        <section class="playlist">
+            <h2>Twoje playlisty</h2>
+            <ul>
+                <li>🎵 Moja ulubiona muzyka</li>
+                <li>🎧 Do pracy</li>
+                <li>🔥 Hity 2025</li>
+            </ul>
+        </section>
+    </main>
+</body>
+</html>

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spotify Clone - Logowanie</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="login-container">
+        <h1>Logowanie</h1>
+        <form action="/login" method="POST">
+            <label for="email">E-mail</label>
+            <input type="email" id="email" name="email" required>
+            
+            <label for="password">Hasło</label>
+            <input type="password" id="password" name="password" required>
+            
+            <button type="submit">Zaloguj się</button>
+        </form>
+        <p>Nie masz konta? <a href="/register">Zarejestruj się</a></p>
+    </div>
+</body>
+</html>
