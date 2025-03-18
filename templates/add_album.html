@@ -13,17 +13,13 @@
             <label for="name">Nazwa albumu</label>
             <input type="text" id="title" name="title" required>
 
+            <label for="genre">Data wydania</label>
+            <input type="date" id="date-published" name="date-published" required>
+
             <label for="artist">Artysta</label>
             <select id="artist" name="artist" required>
                 {% for artist in artists %}
                     <option value="{{artist.id}}">{{artist.name}}</option>
-                {% endfor %}
-            </select>
-
-            <label for="album">Album</label>
-            <select id="album" name="album" required>
-                {% for album in albums %}
-                    <option value="{{album.id}}">{{album.title}}</option>
                 {% endfor %}
             </select>
                 
