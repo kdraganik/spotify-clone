@@ -1,15 +1,23 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Dodaj Artystę - Spotify Clone</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
-    <form method="POST">
-        <input type="text" name="name" placeholder="Name">
-        <input type="text" name="genre" placeholder="Genre">
-        <input type="submit" value="Add Artist">
-    </form>
+    <div class="form-container">
+        <h1>Dodaj Artystę</h1>
+        <form action="/add-artist" method="POST">
+            <label for="name">Nazwa artysty</label>
+            <input type="text" id="name" name="name" required>
+            
+            <label for="genre">Gatunek muzyczny</label>
+            <input type="text" id="genre" name="genre" required>
+            
+            <button type="submit">Dodaj</button>
+        </form>
+    </div>
 </body>
 </html>
