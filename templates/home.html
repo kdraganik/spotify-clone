@@ -8,11 +8,18 @@
 </head>
 <body>
     <header>
-        <h1>Witaj w Spotify Clone</h1>
-        <nav>
-            <ul>
-                <li><a href="/logout">Wyloguj się</a></li>
+        <nav class="navbar">
+            <div class="navbar-brand">
+                <a href="/">Spotify Clone</a>
+            </div>
+            <ul class="navbar-nav">
+                <li><a href="/">Home</a></li>
+                <li><a href="/profile">Profile</a></li>
+                <li><a href="/logout">Logout</a></li>
             </ul>
+            <div class="navbar-user">
+                Logged in as: {{ current_user.username if current_user else 'Guest' }}
+            </div>
         </nav>
     </header>
     
@@ -23,12 +30,15 @@
                 <li>🎵 Moja ulubiona muzyka</li>
                 <li>🎧 Do pracy</li>
                 <li>🔥 Hity 2025</li>
-                <audio controls>
-                    <source src="blob:https://vocaroo.com/8fc06b19-98e5-4271-b117-d45765866182" type="audio/mpeg">
-                    Twoja przeglądarka nie obsługuje odtwarzacza audio.
-                </audio>
             </ul>
         </section>
     </main>
+
+    <footer class="audio-bar">
+        <audio controls>
+            <source src="blob:https://vocaroo.com/8fc06b19-98e5-4271-b117-d45765866182" type="audio/mpeg">
+            Twoja przeglądarka nie obsługuje odtwarzacza audio.
+        </audio>
+    </footer>
 </body>
 </html>
