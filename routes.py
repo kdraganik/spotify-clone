@@ -1,5 +1,5 @@
 from flask import render_template, request, session, redirect, url_for
-from models import db, User, Artist, Album, Song, Role
+from models import db, User, Artist, Album, Song, Role, Playlist
 from utils import get_hash, check_hash
 from datetime import datetime
 from functools import wraps
@@ -33,7 +33,12 @@ def init_routes(app):
     @login_required
     @admin_required
     def admin():
-        return render_template('admin.html')
+        return render_template(
+            'admin.html', 
+            artists=Artist.query.all(),
+            albums=Album.query.all(),
+            songs=Song.query.all(),
+        )
     
     @app.route('/login', methods=['GET', 'POST'])
     def login():
@@ -127,14 +132,21 @@ def init_routes(app):
             db.session.add(song)
             db.session.commit()
             
-            return 'Album recived'
+            return 'Song recived'
         return render_template(
-            'add_album.html', 
+            'add_song.html', 
             error=error, 
             artists=Artist.query.all(),
             albums=Album.query.all(),
         )
-    
+
+    @app.route('/profile', methods=['GET'])
+    @login_required
+    def profile():  
+        user_id = session.get('user')
+        playlists = Playlist.query.filter_by(user_id=user_id).all()
+        return render_template('profile.html', playlists=playlists, user_name=User.query.get(user_id).username)
+
     @app.route('/logout')
     def logout():
         session.clear()

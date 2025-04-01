@@ -44,3 +44,17 @@ class Artist(db.Model):
 
     def __repr__(self):
         return f'<Artist {self.name}>'
+    
+playlist_song = db.Table('playlist_song',
+    db.Column('playlist_id', db.Integer, db.ForeignKey('playlist.id'), primary_key=True),
+    db.Column('song_id', db.Integer, db.ForeignKey('song.id'), primary_key=True)
+)
+
+class Playlist(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(80), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    songs = db.relationship('Song', secondary=playlist_song, lazy='subquery', backref=db.backref('playlists', lazy=True))
+
+    def __repr__(self):
+        return f'<Playlist {self.name}>'

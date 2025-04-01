@@ -1,235 +1,51 @@
-body {
-    font-family: Arial, sans-serif;
+/* Ustawienie zmiennych globalnych Bootstrapa */
+:root {
+    --bs-primary: #1DB954; /* Zielony Spotify */
+    --bs-dark: #121212;    /* Ciemnoszary */
+  }
+  
+  /* Ustawienie tła strony oraz kolorów tekstu */
+  body {
     background-color: #121212;
-    color: #fff;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
-}
-
-.login-container {
+    color: #ffffff;
+  }
+  
+  /* Nadpisanie stylów dla przycisków primary */
+  .btn-primary {
+    background-color: var(--bs-primary);
+    border-color: var(--bs-primary);
+  }
+  
+  .btn-primary:hover,
+  .btn-primary:focus {
+    background-color: #1ed760; /* Jaśniejszy odcień zieleni przy hoverze */
+    border-color: #1ed760;
+  }
+  
+  /* Nadpisanie klas tła Bootstrapa */
+  .bg-primary {
+    background-color: var(--bs-primary) !important;
+  }
+  
+  .bg-dark {
+    background-color: #121212 !important;
+  }
+  
+  /* Nadpisanie stylów dla navbar’a */
+  .navbar {
+    background-color: #121212 !important;
+  }
+  
+  .navbar .navbar-brand,
+  .navbar .nav-link {
+    color: #ffffff !important;
+  }
+  
+  /* Nadpisanie stylów dla kart */
+  .card {
     background-color: #181818;
-    padding: 40px;
-    border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-    text-align: center;
-    width: 300px;
-}
-
-h1 {
-    font-size: 24px;
-    margin-bottom: 20px;
-}
-
-label {
-    display: block;
-    text-align: left;
-    margin-top: 10px;
-    font-size: 14px;
-}
-
-input {
-    width: 100%;
-    padding: 10px;
-    margin-top: 5px;
     border: none;
-    border-radius: 4px;
-    background-color: #282828;
-    color: #fff;
-}
-
-button {
-    width: 100%;
-    padding: 10px;
-    background-color: #1DB954;
-    border: none;
-    border-radius: 4px;
-    color: white;
-    font-size: 16px;
-    cursor: pointer;
-    margin-top: 20px;
-}
-
-button:hover {
-    background-color: #1ed760;
-}
-
-a {
-    color: #1DB954;
-    text-decoration: none;
-}
-
-a:hover {
-    text-decoration: underline;
-}
-
-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 20px;
-    background-color: #181818;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-}
-
-nav ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: flex;
-}
-
-nav ul li {
-    margin-left: 20px;
-}
-
-nav ul li a {
-    color: #1DB954;
-    text-decoration: none;
-    font-size: 16px;
-}
-
-nav ul li a:hover {
-    text-decoration: underline;
-}
-
-main {
-    padding: 20px;
-}
-
-.playlist {
-    background-color: #282828;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-}
-
-.playlist h2 {
-    font-size: 20px;
-    margin-bottom: 10px;
-}
-
-.playlist ul {
-    list-style: none;
-    padding: 0;
-}
-
-.playlist ul li {
-    padding: 10px;
-    border-bottom: 1px solid #444;
-    font-size: 16px;
-}
-
-.playlist ul li:last-child {
-    border-bottom: none;
-}
-
-.form-container {
-    background-color: #181818;
-    padding: 40px;
-    border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-    text-align: center;
-    width: 300px;
-}
-
-h1 {
-    font-size: 24px;
-    margin-bottom: 20px;
-}
-
-label {
-    display: block;
-    text-align: left;
-    margin-top: 10px;
-    font-size: 14px;
-}
-
-input {
-    width: 100%;
-    padding: 10px;
-    margin-top: 5px;
-    border: none;
-    border-radius: 4px;
-    background-color: #282828;
-    color: #fff;
-}
-
-button {
-    width: 100%;
-    padding: 10px;
-    background-color: #1DB954;
-    border: none;
-    border-radius: 4px;
-    color: white;
-    font-size: 16px;
-    cursor: pointer;
-    margin-top: 20px;
-}
-
-button:hover {
-    background-color: #1ed760;
-}
-
-/* Navbar styles */
-.navbar {
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #181818;
-    padding: 20px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-}
-
-.navbar a {
-    color: #1DB954;
-    text-decoration: none;
-    margin: 0 10px;
-    font-size: 16px;
-}
-
-.navbar a:hover {
-    text-decoration: underline;
-}
-
-.navbar .navbar-user {
-    font-size: 16px;
-    color: #fff;
-}
-
-/* Audio bar styles */
-.audio-bar {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    background-color: #222;
-    padding: 10px;
-    text-align: center;
-    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.5);
-}
-
-.audio-bar audio {
-    width: 90%;
-}
-
-header {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 20px;
-    background-color: #181818;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-    z-index: 1000;
-}
-
-main {
-    margin-top: 80px; /* Adjust this value to match the header's height */
-}
+    color: #ffffff;
+  }
+  
+  /* Dodatkowe style – w razie potrzeby możesz je rozbudować */
