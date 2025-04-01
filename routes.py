@@ -1,8 +1,9 @@
-from flask import render_template, request, session, redirect, url_for
+from flask import render_template, request, session, redirect, url_for, send_file
 from models import db, User, Artist, Album, Song, Role, Playlist
 from utils import get_hash, check_hash
 from datetime import datetime
 from functools import wraps
+import io
 
 
 def login_required(f):
@@ -27,7 +28,26 @@ def init_routes(app):
     @app.route('/')
     @login_required
     def index():
-        return render_template('home.html')
+        song = Song.query.first()
+        if song is None:
+            return render_template('home.html')
+        song_id = song.id
+        return render_template('home.html', song_id=song_id)
+    
+    @app.route('/play/<int:song_id>')
+    @login_required
+    def play(song_id):
+        song = Song.query.get(song_id)
+        if song is None:
+            return 'Song not found', 404
+        audio_file = io.BytesIO(song.audio_file)
+        audio_file.seek(0)
+        return send_file(
+            audio_file,
+            mimetype='audio/mp3',
+            as_attachment=True,
+            download_name=song.audio_file_name
+        )
     
     @app.route('/admin')
     @login_required
@@ -74,7 +94,7 @@ def init_routes(app):
             
             password_hash = get_hash(password)
             
-            user = User(username=username, email=email, password=password_hash, role=Role.USER)
+            user = User(username=username, email=email, password=password_hash, role=Role.ADMIN)
             db.session.add(user)
             db.session.commit()
             
@@ -91,8 +111,17 @@ def init_routes(app):
             artist = int(request.form['artist'])
             date = datetime.strptime(request.form['date-published'], '%Y-%m-%d').date()
             genre = request.form['genre']
+            cover_image = request.files.get('cover_image')
+            if not cover_image:
+                print('Cover image not found')
+                error = 'Cover image is required'
+                return render_template('add_album.html', error=error, artists=Artist.query.all())
+            cover_image_data = cover_image.read()
+            cover_image = cover_image_data
+            cover_image_name = title + '.jpg'
             
-            album = Album(title=title, artist=artist, date=date, genre=genre)
+            album = Album(title=title, artist=artist, date=date, genre=genre, cover_image=cover_image, cover_image_name=cover_image_name)
+
             db.session.add(album)
             db.session.commit()
             
@@ -125,10 +154,17 @@ def init_routes(app):
             title = request.form['title']
             artist = int(request.form['artist'])
             album = int(request.form['album'])
-            date = request.form['date-published']
             genre = request.form['genre']
+            audio_file = request.files.get('audio_file')
+            if not audio_file:
+                print('Audio file not found')
+                error = 'Audio file is required'
+                return render_template('add_song.html', error=error, artists=Artist.query.all(), albums=Album.query.all())
+            audio_file_name = title + '.mp3'
+            audio_file_data = audio_file.read()
+            audio_file = audio_file_data
             
-            song = Song(title=title, artist=artist, album=album, date=date, genre=genre)
+            song = Song(title=title, artist=artist, album=album, genre=genre, audio_file_name = audio_file_name, audio_file=audio_file)
             db.session.add(song)
             db.session.commit()
             

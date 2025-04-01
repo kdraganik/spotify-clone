@@ -12,7 +12,7 @@
         <div class="card mx-auto" style="max-width: 500px;">
             <div class="card-body">
                 <h1 class="card-title mb-4">Dodaj Album</h1>
-                <form action="/add_album" method="POST">
+                <form action="/add_album" method="POST" enctype="multipart/form-data">
                     <div class="mb-3">
                         <label for="title" class="form-label">Nazwa albumu</label>
                         <input type="text" id="title" name="title" class="form-control" required>
@@ -32,6 +32,10 @@
                     <div class="mb-3">
                         <label for="genre" class="form-label">Gatunek muzyczny</label>
                         <input type="text" id="genre" name="genre" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="cover_image" class="form-label">Plik okładki</label>
+                        <input type="file" id="cover_image" name="cover_image" class="form-control" required accept=".jpg, .jpeg, .png">
                     </div>
                     <button type="submit" class="btn btn-primary">Dodaj</button>
                 </form>

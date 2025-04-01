@@ -23,6 +23,8 @@ class Song(db.Model):
     artist = db.Column(db.Integer, db.ForeignKey('artist.id'), nullable=False)
     album = db.Column(db.Integer, db.ForeignKey('album.id'), nullable=False)
     genre = db.Column(db.String(80), nullable=False)
+    audio_file_name = db.Column(db.String(80), nullable=False)
+    audio_file = db.Column(db.LargeBinary, nullable=False)
 
     def __repr__(self):
         return f'<Song {self.title}>'
@@ -33,6 +35,8 @@ class Album(db.Model):
     artist = db.Column(db.Integer, db.ForeignKey('artist.id'), nullable=False)
     date = db.Column(db.Date, nullable=False)
     genre = db.Column(db.String(80), nullable=False)
+    cover_image_name = db.Column(db.String(80), nullable=True)
+    cover_image = db.Column(db.LargeBinary, nullable=True)
 
     def __repr__(self):
         return f'<Album {self.title}>'

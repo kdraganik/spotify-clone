@@ -12,7 +12,7 @@
         <div class="card mx-auto" style="max-width: 500px;">
             <div class="card-body">
                 <h1 class="card-title mb-4">Dodaj Piosenkę</h1>
-                <form action="/add_song" method="POST">
+                <form action="/add_song" method="POST" enctype="multipart/form-data">
                     <div class="mb-3">
                         <label for="title" class="form-label">Nazwa piosenki</label>
                         <input type="text" id="title" name="title" class="form-control" required>
@@ -36,6 +36,10 @@
                     <div class="mb-3">
                         <label for="genre" class="form-label">Gatunek muzyczny</label>
                         <input type="text" id="genre" name="genre" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="audio_file" class="form-label">Plik z utworem</label>
+                        <input type="file" id="audio_file" name="audio_file" class="form-control" required accept=".mp3">
                     </div>
                     <button type="submit" class="btn btn-primary">Dodaj</button>
                 </form>
