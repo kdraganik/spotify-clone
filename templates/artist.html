@@ -50,6 +50,8 @@
             <th>Tytuł</th>
             <th>Album</th>
             <th>Gatunek</th>
+            <th>Play Next</th>
+            <th>Queue</th>
           </tr>
         </thead>
         <tbody>
@@ -59,10 +61,16 @@
             <td>{{ song.title }}</td>
             <td>{{ song.album_title if song.album_title is defined else song.album }}</td>
             <td>{{ song.genre }}</td>
+            <td>
+              <a href="/queue-song-next/{{ song.id }}" class="btn btn-sm btn-secondary">Play Next</a>
+            </td>
+            <td>
+              <a href="/queue-song/{{ song.id }}" class="btn btn-sm btn-secondary">Queue</a>
+            </td>
           </tr>
           {% else %}
           <tr>
-            <td colspan="4">Brak piosenek dla tego artysty.</td>
+            <td colspan="6">Brak piosenek dla tego artysty.</td>
           </tr>
           {% endfor %}
         </tbody>

@@ -1,0 +1,59 @@
+{% extends "template.html" %}
+{% block content %}
+<div class="container mt-4">
+  <h1>{{ playlist.name }}</h1>
+  <h2 class="mt-4">Songs in Playlist</h2>
+  <div class="table-responsive">
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Tytuł</th>
+          <th>Artysta</th>
+          <th>Album</th>
+          <th>Gatunek</th>
+          <th>Play Next</th>
+          <th>Queue</th>
+          <th>Usuń</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for song in playlist.songs %}
+        <tr>
+          <td>{{ loop.index }}</td>
+          <td>{{ song.title }}</td>
+          <td>
+            {% set artist_obj = song.artist and song.artist|int and song.artist or None %}
+            {{ song.artist }}
+          </td>
+          <td>
+            {% set album_obj = song.album and song.album|int and song.album or None %}
+            {{ song.album }}
+          </td>
+          <td>{{ song.genre }}</td>
+          <td>
+            <a href="/queue-song-next/{{ song.id }}" class="btn btn-sm btn-secondary">Play Next</a>
+          </td>
+          <td>
+            <a href="/queue-song/{{ song.id }}" class="btn btn-sm btn-secondary">Queue</a>
+          </td>
+          <td>
+            <form action="/remove_from_playlist" method="POST" style="display:inline;">
+              <input type="hidden" name="song_id" value="{{ song.id }}">
+              <input type="hidden" name="playlist_id" value="{{ playlist.id }}">
+              <button type="submit" class="btn btn-danger btn-sm">
+                🗑
+              </button>
+            </form>
+          </td>
+        </tr>
+        {% else %}
+        <tr>
+          <td colspan="8">No songs in this playlist.</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

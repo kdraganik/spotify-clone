@@ -41,7 +41,9 @@ def init_routes(app):
         else:
             current_artist = None
             current_album = None
-        return render_template('home.html', songs=songs, current_song=song, current_artist=current_artist, current_album=current_album)
+        # Fetch user's playlists for "Twoje playlisty"
+        user_playlists = Playlist.query.filter_by(user_id=session.get('user')).all()
+        return render_template('home.html', songs=songs, current_song=song, current_artist=current_artist, current_album=current_album, user_playlists=user_playlists)
     
     @app.route('/queue-song/<int:song_id>')
     @login_required
@@ -52,6 +54,17 @@ def init_routes(app):
         # Initialize or update the session-song queue
         queue = session.get('queue', [])
         queue.append(song_id)
+        session['queue'] = queue
+        return redirect(url_for('index'))
+
+    @app.route('/queue-song-next/<int:song_id>')
+    @login_required
+    def queue_song_next(song_id):
+        song = Song.query.get(song_id)
+        if song is None:
+            return 'Song not found', 404
+        queue = session.get('queue', [])
+        queue.insert(0, song_id)
         session['queue'] = queue
         return redirect(url_for('index'))
     
@@ -118,11 +131,13 @@ def init_routes(app):
     @app.route('/album/<int:album_id>')
     @login_required
     def album(album_id):
-        album = Album.query.get(album_id)
-        if album is None:
+        album_obj = Album.query.get(album_id)
+        if album_obj is None:
             return 'Album not found', 404
         songs = Song.query.filter_by(album=album_id).all()
-        return render_template('album.html', album=album, songs=songs)
+        user_id = session.get('user')
+        user_playlists = Playlist.query.filter_by(user_id=user_id).all()
+        return render_template('album.html', album=album_obj, songs=songs, user_playlists=user_playlists)
     
     @app.route('/album-image/<int:album_id>')
     @login_required
@@ -273,6 +288,19 @@ def init_routes(app):
             artists=Artist.query.all(),
             albums=Album.query.all(),
         )
+    
+    @app.route('/add_playlist', methods=['GET', 'POST'])
+    @login_required
+    def add_playlist():
+        error = None
+        if request.method == 'POST':
+            name = request.form['name']
+            user_id = session.get('user')
+            playlist = Playlist(name=name, user_id=user_id)
+            db.session.add(playlist)
+            db.session.commit()
+            return redirect(url_for('profile'))
+        return render_template('add_playlist.html', error=error)
 
     @app.route('/profile', methods=['GET'])
     @login_required
@@ -281,7 +309,64 @@ def init_routes(app):
         playlists = Playlist.query.filter_by(user_id=user_id).all()
         return render_template('profile.html', playlists=playlists, user_name=User.query.get(user_id).username)
 
+    @app.route('/add_to_playlist', methods=['POST'])
+    @login_required
+    def add_to_playlist():
+        user_id = session.get('user')
+        song_id = request.form.get('song_id')
+        playlist_id = request.form.get('playlist_id')
+        # Validate required fields
+        if not (song_id and playlist_id):
+            return "Missing song id or playlist id", 400
+        song = Song.query.get(song_id)
+        playlist = Playlist.query.filter_by(id=playlist_id, user_id=user_id).first()
+        if not playlist:
+            playlist = Playlist(name="Moja Playlista", user_id=user_id)
+            db.session.add(playlist)
+            db.session.commit()
+        if song and song not in playlist.songs:
+            playlist.songs.append(song)
+            db.session.commit()
+        return redirect(url_for('album', album_id=song.album))
+
+    @app.route('/playlist/<int:playlist_id>')
+    @login_required
+    def view_playlist(playlist_id):
+        user_id = session.get('user')
+        playlist = Playlist.query.filter_by(id=playlist_id, user_id=user_id).first()
+        if not playlist:
+            return "Playlist not found", 404
+        return render_template('playlist.html', playlist=playlist)
+    
+    @app.route('/remove_from_playlist', methods=['POST'])
+    @login_required
+    def remove_from_playlist():
+        user_id = session.get('user')
+        song_id = request.form.get('song_id')
+        playlist_id = request.form.get('playlist_id')
+        if not (song_id and playlist_id):
+            return "Missing song or playlist id", 400
+        playlist = Playlist.query.filter_by(id=playlist_id, user_id=user_id).first()
+        if not playlist:
+            return "Playlist not found", 404
+        song = Song.query.get(song_id)
+        if song in playlist.songs:
+            playlist.songs.remove(song)
+            db.session.commit()
+        return redirect(url_for('view_playlist', playlist_id=playlist_id))
+
     @app.route('/logout')
     def logout():
         session.clear()
         return redirect(url_for('login'))
+        
+    # New route for auto playing next queued song
+    @app.route('/play-next-and-redirect')
+    @login_required
+    def play_next_and_redirect():
+        queue = session.get('queue', [])
+        if not queue:
+            return redirect(url_for('index'))
+        song_id = queue.pop(0)
+        session['queue'] = queue
+        return redirect(url_for('index'))

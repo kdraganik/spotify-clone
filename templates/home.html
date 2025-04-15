@@ -4,9 +4,11 @@
   <section class="playlist">
     <h2 class="mb-3">Twoje playlisty</h2>
     <ul class="list-group">
-      <li class="list-group-item">🎵 Moja ulubiona muzyka</li>
-      <li class="list-group-item">🎧 Do pracy</li>
-      <li class="list-group-item">🔥 Hity 2025</li>
+      {% for playlist in user_playlists %}
+        <li class="list-group-item"><a href="/playlist/{{ playlist.id }}">{{ playlist.name }}</a></li>
+      {% else %}
+        <li class="list-group-item">Brak playlist.</li>
+      {% endfor %}
     </ul>
   </section>
 </div>
@@ -16,7 +18,11 @@
     <h2 class="mb-3">Wszystkie utwory</h2>
     <ul class="list-group">
       {% for song in songs %}
-        <li class="list-group-item"><a href="/queue-song/{{song.id}}">{{song.title}}</a></li>
+        <li class="list-group-item">
+          {{ song.title }}
+          <a href="/queue-song-next/{{ song.id }}" class="btn btn-sm btn-secondary ms-2">Play Next</a>
+          <a href="/queue-song/{{ song.id }}" class="btn btn-sm btn-secondary ms-2">Queue</a>
+        </li>
       {% endfor %}
     </ul>
   </section>
