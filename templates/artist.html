@@ -1,0 +1,73 @@
+{% extends "template.html" %}
+{% block content %}
+<div class="container mt-4">
+  <!-- Artist Header Section -->
+  <div class="row mb-4 align-items-center">
+    <div class="col-md-3 text-center">
+      {% if artist.profile_image_name %}
+        <img src="/artist-image/{{artist.id}}" alt="{{ artist.name }}" class="img-fluid rounded-circle">
+      {% endif %}
+    </div>
+    <div class="col-md-9">
+      <h1>{{ artist.name }}</h1>
+      <p class="lead">{{ artist.genre }}</p>
+    </div>
+  </div>
+  
+  <!-- Albums Section -->
+  <div class="mb-5">
+    <h2>Albumy</h2>
+    <div class="row">
+      {% for album in albums %}
+      <div class="col-md-3 mb-4">
+        <div class="card">
+          {% if album.cover_image_name %}
+            <img src="/album-image/{{album.id}}" class="card-img-top" alt="{{ album.title }}">
+          {% endif %}
+          <div class="card-body">
+            <h5 class="card-title">{{ album.title }}</h5>
+            <p class="card-text">{{ album.genre }}</p>
+            <p class="card-text"><small class="text-muted">{{ album.date.strftime('%Y-%m-%d') }}</small></p>
+          </div>
+        </div>
+      </div>
+      {% else %}
+        <div class="col">
+          <p>Brak albumów dla tego artysty.</p>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+  
+  <!-- Songs Section -->
+  <div class="mb-5">
+    <h2>Piosenki</h2>
+    <div class="table-responsive">
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Tytuł</th>
+            <th>Album</th>
+            <th>Gatunek</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for song in songs %}
+          <tr>
+            <td>{{ loop.index }}</td>
+            <td>{{ song.title }}</td>
+            <td>{{ song.album_title if song.album_title is defined else song.album }}</td>
+            <td>{{ song.genre }}</td>
+          </tr>
+          {% else %}
+          <tr>
+            <td colspan="4">Brak piosenek dla tego artysty.</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Spotify Clone</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="/">Spotify Clone</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent"
+              aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link" href="/">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/profile">Profile</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/logout">Logout</a>
+          </li>
+        </ul>
+        <span class="navbar-text">
+          {% if current_user %}
+            Logged in as: {{ current_user.username }}
+          {% else %}
+            Guest
+          {% endif %}
+        </span>
+      </div>
+    </div>
+  </nav>
+
+  {% block content %}
+  {% endblock %}
+
+  <footer class="fixed-bottom" style="width: 100vw;">
+    <div class="container-fluid">
+      <div class="bg-secondary text-white p-3 rounded">
+        <div class="d-flex align-items-center">
+          {% if current_album and current_album.cover_image_name %}
+            <div>
+              <img src="/album-image/{{ current_album.id }}" alt="{{ current_album.title }}" style="height:80px; width:80px;">
+            </div>
+          {% endif %}
+          <div class="ms-3">
+            {% if current_song %}
+              <div style="font-size:1.5em;">{{ current_song.title }}</div>
+            {% endif %}
+            {% if current_artist %}
+              <div style="font-weight:300;">{{ current_artist.name }}</div>
+            {% endif %}
+          </div>
+          <div class="ms-4 flex-grow-1">
+            {% if current_song %}
+              <audio controls class="w-100" style="height:40px;">
+                <source src="/play/{{ current_song.id }}" type="audio/mpeg">
+                Twoja przeglądarka nie obsługuje odtwarzacza audio.
+              </audio>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

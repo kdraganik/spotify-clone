@@ -1,94 +1,83 @@
-<!DOCTYPE html>
-<html lang="pl">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Admin - Spotify Clone</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
-</head>
-<body>
-  <div class="container mt-4">
-    <h1 class="mb-4">ADMIN PANEL</h1>
+{% extends "template.html" %}
+{% block content %}
+<div class="container mt-4">
+  <h1 class="mb-4">ADMIN PANEL</h1>
 
-    <h2>Albums</h2>
-    <div class="table-responsive mb-4">
-      <table class="table table-striped">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Title</th>
-            <th>Artist</th>
-            <th>Date</th>
-            <th>Genre</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for album in albums %}
-          <tr>
-            <td>{{ album.id }}</td>
-            <td>{{ album.title }}</td>
-            <td>{{ album.artist }}</td>
-            <td>{{ album.date }}</td>
-            <td>{{ album.genre }}</td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-    </div>
-    <a href="{{ url_for('add_album') }}" class="btn btn-primary mb-4">Add Album</a>
-
-    <h2>Artists</h2>
-    <div class="table-responsive mb-4">
-      <table class="table table-striped">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Genre</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for artist in artists %}
-          <tr>
-            <td>{{ artist.id }}</td>
-            <td>{{ artist.name }}</td>
-            <td>{{ artist.genre }}</td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-    </div>
-    <a href="{{ url_for('add_artist') }}" class="btn btn-primary mb-4">Add Artist</a>
-
-    <h2>Songs</h2>
-    <div class="table-responsive mb-4">
-      <table class="table table-striped">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Title</th>
-            <th>Artist</th>
-            <th>Album</th>
-            <th>Genre</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for song in songs %}
-          <tr>
-            <td>{{ song.id }}</td>
-            <td>{{ song.title }}</td>
-            <td>{{ song.artist }}</td>
-            <td>{{ song.album }}</td>
-            <td>{{ song.genre }}</td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-    </div>
-    <a href="{{ url_for('add_song') }}" class="btn btn-primary mb-4">Add Song</a>
+  <h2>Albums</h2>
+  <div class="table-responsive mb-4">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Title</th>
+          <th>Artist</th>
+          <th>Date</th>
+          <th>Genre</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for album in albums %}
+        <tr>
+          <td>{{ album.id }}</td>
+          <td>{{ album.title }}</td>
+          <td>{{ album.artist }}</td>
+          <td>{{ album.date }}</td>
+          <td>{{ album.genre }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
   </div>
+  <a href="{{ url_for('add_album') }}" class="btn btn-primary mb-4">Add Album</a>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+  <h2>Artists</h2>
+  <div class="table-responsive mb-4">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Genre</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for artist in artists %}
+        <tr>
+          <td>{{ artist.id }}</td>
+          <td>{{ artist.name }}</td>
+          <td>{{ artist.genre }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  <a href="{{ url_for('add_artist') }}" class="btn btn-primary mb-4">Add Artist</a>
+
+  <h2>Songs</h2>
+  <div class="table-responsive mb-4">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Title</th>
+          <th>Artist</th>
+          <th>Album</th>
+          <th>Genre</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for song in songs %}
+        <tr>
+          <td>{{ song.id }}</td>
+          <td>{{ song.title }}</td>
+          <td>{{ song.artist }}</td>
+          <td>{{ song.album }}</td>
+          <td>{{ song.genre }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  <a href="{{ url_for('add_song') }}" class="btn btn-primary mb-4">Add Song</a>
+</div>
+{% endblock %}

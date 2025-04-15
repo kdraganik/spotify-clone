@@ -45,6 +45,8 @@ class Artist(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80), nullable=False)
     genre = db.Column(db.String(80), nullable=False)
+    profile_image_name = db.Column(db.String(80), nullable=True)
+    profile_image = db.Column(db.LargeBinary, nullable=True)
 
     def __repr__(self):
         return f'<Artist {self.name}>'

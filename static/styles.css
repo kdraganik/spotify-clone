@@ -34,11 +34,25 @@
   /* Nadpisanie stylów dla navbar’a */
   .navbar {
     background-color: #121212 !important;
+    border-bottom: 1px solid #333;
+    margin-bottom: 0;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
   }
   
   .navbar .navbar-brand,
   .navbar .nav-link {
     color: #ffffff !important;
+  }
+
+  .navbar-brand {
+    font-size: 1.3em;
+    margin-right: 1rem;
+  }
+
+  .navbar .nav-link {
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
   }
   
   /* Nadpisanie stylów dla kart */

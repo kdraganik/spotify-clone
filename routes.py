@@ -28,11 +28,32 @@ def init_routes(app):
     @app.route('/')
     @login_required
     def index():
-        song = Song.query.first()
+        songs = Song.query.all()
+        # Use the first song from the session queue (if any), else fallback:
+        queue = session.get('queue', [])
+        if queue:
+            song = Song.query.get(queue[0])
+        else:
+            song = Song.query.first()
+        if song:
+            current_artist = Artist.query.get(song.artist)
+            current_album = Album.query.get(song.album)
+        else:
+            current_artist = None
+            current_album = None
+        return render_template('home.html', songs=songs, current_song=song, current_artist=current_artist, current_album=current_album)
+    
+    @app.route('/queue-song/<int:song_id>')
+    @login_required
+    def queue_song(song_id):
+        song = Song.query.get(song_id)
         if song is None:
-            return render_template('home.html')
-        song_id = song.id
-        return render_template('home.html', song_id=song_id)
+            return 'Song not found', 404
+        # Initialize or update the session-song queue
+        queue = session.get('queue', [])
+        queue.append(song_id)
+        session['queue'] = queue
+        return redirect(url_for('index'))
     
     @app.route('/play/<int:song_id>')
     @login_required
@@ -48,6 +69,75 @@ def init_routes(app):
             as_attachment=True,
             download_name=song.audio_file_name
         )
+    
+    @app.route('/play-next')
+    @login_required
+    def play_next():
+        queue = session.get('queue', [])
+        if not queue:
+            return "No song in queue", 404
+        song_id = queue.pop(0)
+        session['queue'] = queue
+        song = Song.query.get(song_id)
+        if song is None:
+            return 'Song not found', 404
+        audio_file = io.BytesIO(song.audio_file)
+        audio_file.seek(0)
+        return send_file(
+            audio_file,
+            mimetype='audio/mp3',
+            as_attachment=True,
+            download_name=song.audio_file_name
+        )
+    
+    @app.route('/artist/<int:artist_id>')
+    @login_required
+    def artist(artist_id):
+        artist = Artist.query.get(artist_id)
+        if artist is None:
+            return 'Artist not found', 404
+        albums = Album.query.filter_by(artist=artist_id).all()
+        songs = Song.query.filter_by(artist=artist_id).all()
+        return render_template('artist.html', artist=artist, albums=albums, songs=songs)
+    
+    @app.route('/artist-image/<int:artist_id>')
+    @login_required
+    def artist_image(artist_id):
+        artist = Artist.query.get(artist_id)
+        if artist is None:
+            return 'Artist not found', 404
+        image = io.BytesIO(artist.profile_image)
+        image.seek(0)
+        return send_file(
+            image,
+            mimetype='image/jpeg',
+            as_attachment=False,
+            download_name=artist.profile_image_name
+        )
+    
+    @app.route('/album/<int:album_id>')
+    @login_required
+    def album(album_id):
+        album = Album.query.get(album_id)
+        if album is None:
+            return 'Album not found', 404
+        songs = Song.query.filter_by(album=album_id).all()
+        return render_template('album.html', album=album, songs=songs)
+    
+    @app.route('/album-image/<int:album_id>')
+    @login_required
+    def album_image(album_id):
+        album = Album.query.get(album_id)
+        if album is None:
+            return 'Album not found', 404
+        image = io.BytesIO(album.cover_image)
+        image.seek(0)
+        return send_file(
+            image,
+            mimetype='image/jpeg',
+            as_attachment=False,
+            download_name=album.cover_image_name
+        )   
     
     @app.route('/admin')
     @login_required
@@ -137,8 +227,16 @@ def init_routes(app):
         if request.method == 'POST':
             name = request.form['name']
             genre = request.form['genre']
-            
-            artist = Artist(name=name, genre=genre)
+            profile_image = request.files.get('image')
+            if not profile_image:
+                print('Profile image not found')
+                error = 'Profile image is required'
+                return render_template('add_artist.html', error=error)
+            profile_image_data = profile_image.read()
+            profile_image = profile_image_data
+            profile_image_name = name + '.jpg'
+
+            artist = Artist(name=name, genre=genre, profile_image=profile_image, profile_image_name=profile_image_name)
             db.session.add(artist)
             db.session.commit()
             
